@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Case Skill — Process Flow v1.4.0</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1a1a2e;
+    background: #f4f6fb;
+    padding: 32px 24px;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    background: linear-gradient(135deg, #0b2545 0%, #1a4080 100%);
+    padding: 40px 48px 32px;
+    color: #fff;
+  }
+  .doc-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+  .doc-header p {
+    color: #c8d8f0;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .meta-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: #c8d8f0;
+  }
+  .meta-chip span { color: #fff; font-weight: 600; }
+
+  /* ── Body ── */
+  .body { padding: 32px 48px 48px; }
+
+  p { color: #3a4460; line-height: 1.7; margin-bottom: 10px; }
+
+  /* ── Callout ── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 0 0 28px;
+    font-size: 12.5px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; color: #3a4460; }
+  .callout-body strong { display: block; margin-bottom: 3px; color: #0b2545; }
+  .callout-info { background: #e3f2fd; border-left: 4px solid #1976d2; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+  .badge-gate   { background: #fce4ec; color: #c62828; border: 1px solid #ef9a9a; }
+  .badge-hex    { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-claude { background: #ede7f6; color: #4527a0; border: 1px solid #ce93d8; }
+  .badge-gdoc   { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+  .badge-data   { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+
+  /* ── Step flow ── */
+  .flow-wrapper { position: relative; }
+
+  .step-row {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+  }
+
+  /* Spine column */
+  .spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .spine-line {
+    width: 2px;
+    flex: 1;
+    background: #dde3f0;
+    margin: 3px 0 0;
+  }
+
+  /* Gate row */
+  .gate-row {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+  }
+  .gate-spine {
+    display: flex;
+    justify-content: center;
+  }
+  .gate-spine-line {
+    width: 2px;
+    height: 28px;
+    background: #dde3f0;
+  }
+  .gate-content {
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+  }
+
+  /* Step body */
+  .step-content {
+    padding: 0 0 0 16px;
+    padding-bottom: 0;
+  }
+  .step-inner {
+    border-radius: 10px;
+    border: 1.5px solid #e8edf5;
+    padding: 16px 20px;
+    margin-bottom: 8px;
+  }
+  .step-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0b2545;
+  }
+  .step-badges { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+
+  .step-desc {
+    font-size: 12.5px;
+    color: #3a4460;
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+
+  /* Mini section inside step */
+  .mini-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #6b7a99;
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+  .mini-label:first-child { margin-top: 0; }
+
+  /* Pills */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill {
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .pill-in  { background: #f0f4ff; color: #2d3899; border-color: #c5cef0; }
+  .pill-out { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+  .pill-dat { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+  .pill-tol { background: #fefce8; color: #854d0e; border-color: #fde68a; }
+
+  /* Step color themes */
+  .s1 .step-circle { background: #1a4080; }
+  .s1 .step-inner  { border-color: #c5d0ea; background: #f8f9ff; }
+
+  .s2 .step-circle { background: #00695c; }
+  .s2 .step-inner  { border-color: #b2dfdb; background: #f4fffe; }
+
+  .s3 .step-circle { background: #4527a0; }
+  .s3 .step-inner  { border-color: #d1c4e9; background: #faf8ff; }
+
+  .s4 .step-circle { background: #2e7d32; }
+  .s4 .step-inner  { border-color: #c8e6c9; background: #f5fdf5; }
+
+  .s5 .step-circle { background: #e65100; }
+  .s5 .step-inner  { border-color: #ffccbc; background: #fff9f6; }
+
+  .s6 .step-circle { background: #bf360c; }
+  .s6 .step-inner  { border-color: #ffab91; background: #fff8f5; }
+
+  .s7 .step-circle { background: #37474f; }
+  .s7 .step-inner  { border-color: #cfd8dc; background: #f9fafa; }
+
+  .s8 .step-circle { background: #1b5e20; }
+  .s8 .step-inner  { border-color: #a5d6a7; background: #f3fdf5; }
+
+  /* ── Branch block (Step 2) ── */
+  .branch-wrapper {
+    margin-top: 12px;
+    background: #f7f9fd;
+    border: 1px solid #dde3f0;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .branch-header {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #6b7a99;
+    margin-bottom: 10px;
+  }
+  .branch-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .branch-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid;
+  }
+  .branch-a { background: #e8f5e9; border-color: #a5d6a7; }
+  .branch-b { background: #fff8e1; border-color: #ffe082; }
+  .branch-c { background: #e3f2fd; border-color: #90caf9; }
+  .branch-tag {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .branch-a .branch-tag { color: #2e7d32; }
+  .branch-b .branch-tag { color: #e65100; }
+  .branch-c .branch-tag { color: #1565c0; }
+  .branch-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0b2545;
+    margin-bottom: 8px;
+  }
+  .branch-items { list-style: none; padding: 0; }
+  .branch-items li {
+    font-size: 11.5px;
+    color: #3a4460;
+    padding: 2px 0 2px 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .branch-items li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #9aa5bf;
+    font-size: 10px;
+    top: 3px;
+  }
+
+  /* ── Segmentation layers (Step 3) ── */
+  .seg-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .seg-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid;
+  }
+  .seg-l1 { background: #e8f5e9; border-color: #a5d6a7; }
+  .seg-l2 { background: #e3f2fd; border-color: #90caf9; }
+  .seg-l3 { background: #fff8e1; border-color: #ffe082; }
+  .seg-tag {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .seg-l1 .seg-tag { color: #2e7d32; }
+  .seg-l2 .seg-tag { color: #1565c0; }
+  .seg-l3 .seg-tag { color: #e65100; }
+  .seg-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0b2545;
+    margin-bottom: 5px;
+  }
+  .seg-note { font-size: 11.5px; color: #3a4460; line-height: 1.5; }
+
+  /* ── Program metric chips (Step 4) ── */
+  .prog-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .prog-chip {
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11.5px;
+    border: 1px solid;
+  }
+  .prog-banking { background: #e8f5e9; color: #1b5e20; border-color: #a5d6a7; }
+  .prog-lending { background: #fff3e0; color: #bf360c; border-color: #ffcc80; }
+  .prog-spend   { background: #e3f2fd; color: #0d47a1; border-color: #90caf9; }
+  .prog-growth  { background: #ede7f6; color: #4a148c; border-color: #ce93d8; }
+  .prog-label   { font-weight: 700; display: block; margin-bottom: 2px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: #f7f9fd;
+    border-radius: 8px;
+    border: 1px solid #dde3f0;
+  }
+  .legend-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #6b7a99;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    color: #3a4460;
+  }
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── Footer ── */
+  .doc-footer {
+    background: #f0f4fb;
+    border-top: 2px solid #e8edf5;
+    padding: 16px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .doc-footer-left  { font-size: 11.5px; color: #6b7a99; }
+  .doc-footer-right { font-size: 11.5px; font-weight: 700; color: #1a4080; }
+
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 11px;
+    background: #f0f4fb;
+    border: 1px solid #dde3f0;
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #2d3550;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <div class="doc-header">
+    <h1>Business Case Skill — Process Flow</h1>
+    <p>Full 8-step workflow for business case analysis: data sources, analytical tools, confirm gates, and outputs at each stage.</p>
+    <div class="meta-row">
+      <div class="meta-chip">Skill: <span>/liftoff</span></div>
+      <div class="meta-chip">Version: <span>v1.4.0</span></div>
+      <div class="meta-chip">Data: <span>analytics.earl (Snowflake)</span></div>
+      <div class="meta-chip">Analysis: <span>Hex + Claude</span></div>
+      <div class="meta-chip">Output: <span>Google Doc</span></div>
+    </div>
+  </div>
+
+  <!-- ── Body ── -->
+  <div class="body">
+
+    <div class="callout callout-info">
+      <div class="callout-icon">ℹ</div>
+      <div class="callout-body">
+        <strong>How to read this diagram</strong>
+        Each step is confirmation-gated — Claude does not advance until the user explicitly confirms.
+        <span class="badge badge-gate">CONFIRM GATE</span> markers show these checkpoints.
+        <span class="badge badge-hex">Hex</span> steps trigger Snowflake queries via Hex threads.
+        Pills show inputs <span class="pill pill-in" style="display:inline-block; vertical-align:middle; font-size:11px; padding:1px 8px;">input</span>,
+        outputs <span class="pill pill-out" style="display:inline-block; vertical-align:middle; font-size:11px; padding:1px 8px;">output</span>,
+        data tables <span class="pill pill-dat" style="display:inline-block; vertical-align:middle; font-size:11px; padding:1px 8px;">data</span>,
+        and tools called <span class="pill pill-tol" style="display:inline-block; vertical-align:middle; font-size:11px; padding:1px 8px;">tool</span>.
+      </div>
+    </div>
+
+    <div class="flow-wrapper">
+
+      <!-- ═══════════════════════════ STEP 1 ═══════════════════════════ -->
+      <div class="step-row s1">
+        <div class="spine">
+          <div class="step-circle">1</div>
+          <div class="spine-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Initiative Intake &amp; Interpretation</div>
+              <div class="step-badges">
+                <span class="badge badge-claude">Claude</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Read the business case from Google Doc, Confluence, or a written description. Summarize the initiative, identify
+              the target program and unit economic levers, then classify as <strong>Frontbook</strong>, <strong>Backbook</strong>,
+              or <strong>Both</strong> using the Company Funnel Lever Taxonomy.
+            </div>
+            <div class="mini-label">Inputs</div>
+            <div class="pill-row">
+              <span class="pill pill-in">Google Doc URL</span>
+              <span class="pill pill-in">Confluence page URL</span>
+              <span class="pill pill-in">Written description</span>
+            </div>
+            <div class="mini-label">Outputs</div>
+            <div class="pill-row">
+              <span class="pill pill-out">Program classification (Banking / Lending / Spend / Growth)</span>
+              <span class="pill pill-out">Unit economic levers (primary + secondary)</span>
+              <span class="pill pill-out">Frontbook / Backbook / Both classification</span>
+              <span class="pill pill-out">Key assumptions + missing info</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate 1 -->
+      <div class="gate-row">
+        <div class="gate-spine"><div class="gate-spine-line"></div></div>
+        <div class="gate-content">
+          <span class="badge badge-gate">CONFIRM GATE — classification &amp; lever mapping</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════ STEP 2 ═══════════════════════════ -->
+      <div class="step-row s2">
+        <div class="spine">
+          <div class="step-circle">2</div>
+          <div class="spine-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Eligible Population Definition</div>
+              <div class="step-badges">
+                <span class="badge badge-hex">Hex</span>
+                <span class="badge badge-data">analytics.earl</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Define who qualifies for the initiative. Route to one of three paths based on the Step 1 classification,
+              confirm the population definition with the user, then trigger Hex thread(s) to size the eligible population by credit band.
+            </div>
+            <div class="mini-label">Data Sources</div>
+            <div class="pill-row">
+              <span class="pill pill-dat">earl_account (daily grain — filter to latest date)</span>
+              <span class="pill pill-dat">earl_customer</span>
+              <span class="pill pill-dat">earl_application</span>
+            </div>
+
+            <div class="branch-wrapper">
+              <div class="branch-header">Routing — driven by Step 1 Frontbook / Backbook / Both classification</div>
+              <div class="branch-cols">
+                <div class="branch-card branch-a">
+                  <div class="branch-tag">Path A</div>
+                  <div class="branch-name">Frontbook</div>
+                  <ul class="branch-items">
+                    <li>Funnel lever lookup table determines eligible set</li>
+                    <li>Denominator: profiles created (Volume) or total customers (Conversion / Activation)</li>
+                    <li>Single Hex thread — group by <code>originalcreditscoreband</code></li>
+                  </ul>
+                </div>
+                <div class="branch-card branch-b">
+                  <div class="branch-tag">Path B</div>
+                  <div class="branch-name">Backbook</div>
+                  <ul class="branch-items">
+                    <li>All existing customers, active + inactive</li>
+                    <li>Denominator: total customer base — do NOT filter to active-only</li>
+                    <li>Single Hex thread — group by <code>originalcreditscoreband</code></li>
+                  </ul>
+                </div>
+                <div class="branch-card branch-c">
+                  <div class="branch-tag">Path C</div>
+                  <div class="branch-name">Both — Parallel</div>
+                  <ul class="branch-items">
+                    <li>Confirm both definitions before triggering</li>
+                    <li>Track A (Frontbook) + Track B (Backbook) definitions presented together</li>
+                    <li>2 Hex threads triggered in parallel</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini-label">Outputs</div>
+            <div class="pill-row">
+              <span class="pill pill-out">Population table — N by credit band</span>
+              <span class="pill pill-out">% of eligible vs. total denominator</span>
+              <span class="pill pill-out">Hex thread link(s)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate 2 -->
+      <div class="gate-row">
+        <div class="gate-spine"><div class="gate-spine-line"></div></div>
+        <div class="gate-content">
+          <span class="badge badge-gate">CONFIRM GATE — population definition &amp; sizing</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════ STEP 3 ═══════════════════════════ -->
+      <div class="step-row s3">
+        <div class="spine">
+          <div class="step-circle">3</div>
+          <div class="spine-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Population Segmentation</div>
+              <div class="step-badges">
+                <span class="badge badge-claude">Claude</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Break the eligible population into sub-groups with meaningfully different adoption rates. Three layers —
+              Layer 1 is always applied. Layers 2 and 3 are conditional on program and lever type; rationale required if either is skipped.
+            </div>
+            <div class="seg-cols">
+              <div class="seg-card seg-l1">
+                <div class="seg-tag">Layer 1 — Always Applied</div>
+                <div class="seg-name">Credit Band</div>
+                <div class="seg-note">6 bands: Sub Prime → Near-Prime → Prime → Prime+ → Super Prime → None (money-only). Compulsory on every initiative.</div>
+              </div>
+              <div class="seg-card seg-l2">
+                <div class="seg-tag">Layer 2 — Growth: Mandatory · Others: Optional</div>
+                <div class="seg-name">Acquisition Channel</div>
+                <div class="seg-note">Activations · Paid · Organic · C2C · Affiliate · Other. Must state rationale if not applied.</div>
+              </div>
+              <div class="seg-card seg-l3">
+                <div class="seg-tag">Layer 3 — Reactivation: Mandatory · Others: Optional</div>
+                <div class="seg-name">Activity State</div>
+                <div class="seg-note">Highly Active (&lt;30d) · Moderately Active (31–90d) · Low/Dormant (90d+). Must state rationale if not applied.</div>
+              </div>
+            </div>
+            <div class="mini-label">Outputs</div>
+            <div class="pill-row">
+              <span class="pill pill-out">Segment matrix definition (N segments)</span>
+              <span class="pill pill-out">Layer 2 / Layer 3 rationale documented</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate 3 -->
+      <div class="gate-row">
+        <div class="gate-spine"><div class="gate-spine-line"></div></div>
+        <div class="gate-content">
+          <span class="badge badge-gate">CONFIRM GATE — segmentation approach</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════ STEP 4 ═══════════════════════════ -->
+      <div class="step-row s4">
+        <div class="spine">
+          <div class="step-circle">4</div>
+          <div class="spine-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Baseline Behaviours</div>
+              <div class="step-badges">
+                <span class="badge badge-hex">Hex</span>
+                <span class="badge badge-data">analytics.earl</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Establish the pre-initiative diagnostic profile of each segment. Metric set is program-specific and driven by the
+              Step 1 lever mapping. Analysis period: trailing 3 complete calendar months to the most recent available month.
+            </div>
+            <div class="mini-label">Data Sources</div>
+            <div class="pill-row">
+              <span class="pill pill-dat">earl_account (latest date — balance &amp; product metrics)</span>
+              <span class="pill pill-dat">earl_transaction (trailing 3-month spend metrics)</span>
+            </div>
+            <div class="mini-label">Program-Specific Metric Sets</div>
+            <div class="prog-chips">
+              <div class="prog-chip prog-banking">
+                <span class="prog-label">Banking</span>
+                Avg deposit balance · Monthly attrition rate · Product activation rate · Reactivation rate
+              </div>
+              <div class="prog-chip prog-lending">
+                <span class="prog-label">Lending</span>
+                Avg credit balance &amp; utilization · GCO rate (ann.) · Bucket roll rates · Recovery rate · Avg credit limit &amp; ICL
+              </div>
+              <div class="prog-chip prog-spend">
+                <span class="prog-label">Spend</span>
+                Avg monthly purchase volume · Activity rate · Effective rewards rate · Transaction margin per active
+              </div>
+              <div class="prog-chip prog-growth">
+                <span class="prog-label">Growth</span>
+                Monthly new acquisitions · Channel mix (Marketing taxonomy) · C2C rate
+              </div>
+            </div>
+            <div class="mini-label">Outputs</div>
+            <div class="pill-row">
+              <span class="pill pill-out">Baseline table — segments × program metrics</span>
+              <span class="pill pill-out">Key observations</span>
+              <span class="pill pill-out">Hex thread link</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate 4 -->
+      <div class="gate-row">
+        <div class="gate-spine"><div class="gate-spine-line"></div></div>
+        <div class="gate-content">
+          <span class="badge badge-gate">CONFIRM GATE — baselines reasonable?</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════ STEP 5 ═══════════════════════════ -->
+      <div class="step-row s5">
+        <div class="spine">
+          <div class="step-circle">5</div>
+          <div class="spine-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Adoption Likelihood</div>
+              <div class="step-badges">
+                <span class="badge badge-claude">Claude</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Estimate the probability each segment adopts the initiative. Produces Base / Downside / Upside scenarios anchored
+              to observable behaviour or documented business case assumptions. Credit band alone is not a reliable predictor — rates
+              are initiative-specific. Surface program driver prompts before building the adoption table.
+            </div>
+            <div class="mini-label">Inputs</div>
+            <div class="pill-row">
+              <span class="pill pill-in">Business case adoption assumptions</span>
+              <span class="pill pill-in">Step 4 baseline metrics (for differentiation)</span>
+              <span class="pill pill-in">Program driver prompts (Banking / Lending / Spend / Growth)</span>
+            </div>
+            <div class="mini-label">Outputs</div>
+            <div class="pill-row">
+              <span class="pill pill-out">Adoption table — Downside / Base / Upside by segment</span>
+              <span class="pill pill-out">Adopted N (Base) by credit band</span>
+              <span class="pill pill-out">Assumption log (updated)</span>
+              <span class="pill pill-out">Historical anchors</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate 5 -->
+      <div class="gate-row">
+        <div class="gate-spine"><div class="gate-spine-line"></div></div>
+        <div class="gate-content">
+          <span class="badge badge-gate">CONFIRM GATE — adoption assumptions reasonable?</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════ STEP 6 ═══════════════════════════ -->
+      <div class="step-row s6">
+        <div class="spine">
+          <div class="step-circle">6</div>
+          <div class="spine-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Impact Estimation</div>
+              <div class="step-badges">
+                <span class="badge badge-claude">Claude</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Apply unit economics to the adopted population. For Both-path initiatives, produces separate Frontbook and Backbook
+              sections plus a blended summary table. Flags items requiring FP&amp;A 3-statement model build.
+              If unit economics are missing from the business case, Claude proposes estimates from Step 4 baselines (clearly labelled as estimated).
+            </div>
+            <div class="mini-label">Inputs</div>
+            <div class="pill-row">
+              <span class="pill pill-in">Business case unit economics</span>
+              <span class="pill pill-in">Step 4 baselines (fallback for missing unit econ)</span>
+              <span class="pill pill-in">Step 5 adopted N — by scenario</span>
+            </div>
+            <div class="mini-label">Outputs</div>
+            <div class="pill-row">
+              <span class="pill pill-out">Impact table — segment × scenario</span>
+              <span class="pill pill-out">Monthly + annualized impact (Down / Base / Up)</span>
+              <span class="pill pill-out">Both-path: Frontbook + Backbook + blended table</span>
+              <span class="pill pill-out">FP&amp;A model handoff items</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate 6 -->
+      <div class="gate-row">
+        <div class="gate-spine"><div class="gate-spine-line"></div></div>
+        <div class="gate-content">
+          <span class="badge badge-gate">CONFIRM GATE — impact assumptions confirmed?</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════ STEP 7 ═══════════════════════════ -->
+      <div class="step-row s7">
+        <div class="spine">
+          <div class="step-circle">7</div>
+          <div class="spine-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Timeline</div>
+              <div class="step-badges">
+                <span class="badge badge-claude">Claude</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Extract the estimated launch date from the business case to anchor the FP&amp;A model timeline.
+              If not stated, Claude prompts the user directly before proceeding. No Hex query required.
+            </div>
+            <div class="mini-label">Input</div>
+            <div class="pill-row">
+              <span class="pill pill-in">Business case (launch date field)</span>
+            </div>
+            <div class="mini-label">Output</div>
+            <div class="pill-row">
+              <span class="pill pill-out">Estimated launch: YYYY-MM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate 7 -->
+      <div class="gate-row">
+        <div class="gate-spine"><div class="gate-spine-line"></div></div>
+        <div class="gate-content">
+          <span class="badge badge-gate">CONFIRM GATE — timeline confirmed</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════ STEP 8 ═══════════════════════════ -->
+      <div class="step-row s8">
+        <div class="spine">
+          <!-- No spine-line after final step -->
+          <div class="step-circle">8</div>
+        </div>
+        <div class="step-content">
+          <div class="step-inner">
+            <div class="step-header-row">
+              <div class="step-title">Final Output Document</div>
+              <div class="step-badges">
+                <span class="badge badge-gdoc">Google Doc</span>
+                <span class="badge badge-claude">Claude</span>
+              </div>
+            </div>
+            <div class="step-desc">
+              Copy the output doc template to the Claude Drive folder, populate all <code>{{PLACEHOLDER}}</code> tokens via
+              <code>find_and_replace_doc</code>, and share the link. The document contains an 8-section structure covering
+              Executive Summary through References, with an embedded auditability checklist.
+            </div>
+            <div class="mini-label">Tools Called</div>
+            <div class="pill-row">
+              <span class="pill pill-tol">copy_drive_file — template ID 166Jq9H… → Claude folder</span>
+              <span class="pill pill-tol">find_and_replace_doc — one call per {{PLACEHOLDER}} token</span>
+            </div>
+            <div class="mini-label">Output Document — 8 Sections</div>
+            <div class="pill-row">
+              <span class="pill pill-out">1. Executive Summary</span>
+              <span class="pill pill-out">2. Problem Statement</span>
+              <span class="pill pill-out">3. Methodology</span>
+              <span class="pill pill-out">4.1 Eligible Population</span>
+              <span class="pill pill-out">4.2 Segmentation</span>
+              <span class="pill pill-out">4.3 Baseline Behaviours</span>
+              <span class="pill pill-out">4.4 Adoption Likelihood</span>
+              <span class="pill pill-out">4.5 Impact Estimation</span>
+              <span class="pill pill-out">5. Program Lever Mapping</span>
+              <span class="pill pill-out">6. Timeline</span>
+              <span class="pill pill-out">7. Conclusion &amp; FP&amp;A Handoff</span>
+              <span class="pill pill-out">8. References</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /flow-wrapper -->
+
+    <!-- ── Legend ── -->
+    <div class="legend">
+      <div class="legend-title">Legend</div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#e3f2fd; border:1px solid #90caf9;"></div>
+        <span><strong>Hex</strong> — Snowflake query triggered via Hex thread (natural language prompt)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#ede7f6; border:1px solid #ce93d8;"></div>
+        <span><strong>Claude</strong> — Interpretation, modelling, or document generation</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#e8f5e9; border:1px solid #a5d6a7;"></div>
+        <span><strong>Google Doc</strong> — Populated output document written to Drive</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#fce4ec; border:1px solid #ef9a9a;"></div>
+        <span><strong>Confirm Gate</strong> — User must explicitly confirm before advancing to next step</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#f0f4ff; border:1px solid #c5cef0;"></div>
+        <span><span style="color:#2d3899; font-weight:600;">Input</span> — Data or context flowing into the step</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#f0fdf4; border:1px solid #bbf7d0;"></div>
+        <span><span style="color:#166534; font-weight:600;">Output</span> — Result produced by the step</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#fff7ed; border:1px solid #fed7aa;"></div>
+        <span><span style="color:#9a3412; font-weight:600;">Data table</span> — Snowflake table accessed</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#fefce8; border:1px solid #fde68a;"></div>
+        <span><span style="color:#854d0e; font-weight:600;">Tool call</span> — MCP / API tool called</span>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- ── Footer ── -->
+  <div class="doc-footer">
+    <div class="doc-footer-left">Launch Protocol · Business Case Analysis · /liftoff</div>
+    <div class="doc-footer-right">v1.4.0 · April 2026</div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
