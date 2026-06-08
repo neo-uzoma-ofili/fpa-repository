@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Bridge — F05 → F06 — Jan-2027</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f6fb; color: #1a1a2e; line-height: 1.6; padding: 2rem; }
+.page { max-width: 1400px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(11,37,69,0.08); overflow: hidden; }
+.header { background: linear-gradient(135deg, #0b2545 0%, #13315c 50%, #134074 100%); color: #fff; padding: 2.5rem 2rem; }
+.header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; }
+.header .subtitle { font-size: 0.95rem; opacity: 0.85; margin-bottom: 1rem; }
+.header .meta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.header .meta span { background: rgba(255,255,255,0.12); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem; }
+.content { padding: 2rem; }
+.window-line { font-size: 0.9rem; color: #555; margin-bottom: 1.5rem; font-weight: 500; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: #0b2545; color: #fff; padding: 0.7rem 0.8rem; text-align: left; font-weight: 600; }
+td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #e8ecf4; vertical-align: top; }
+tr:nth-child(even) td { background: #f8f9fc; }
+.fav { color: #2e7d32; font-weight: 600; }
+.unfav { color: #c62828; font-weight: 600; }
+.total-row td { font-weight: 700; background: #e8ecf4 \!important; border-top: 2px solid #0b2545; }
+.opening-row td { background: #f0f4f8 \!important; font-weight: 600; }
+.closing-row td { background: #f0f4f8 \!important; font-weight: 600; }
+td.driver { min-width: 500px; font-size: 0.82rem; line-height: 1.5; color: #333; }
+td.row-id { font-family: 'SF Mono', Consolas, monospace; font-size: 0.8rem; color: #555; white-space: nowrap; }
+td.dollar { white-space: nowrap; text-align: right; }
+td.delta { white-space: nowrap; text-align: right; }
+.recon-pass { color: #2e7d32; font-weight: 700; }
+.footer { background: #f4f6fb; padding: 1.5rem 2rem; text-align: center; font-size: 0.75rem; color: #666; border-top: 1px solid #e8ecf4; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <h1>R325 Available Cash Bridge — F05 → F06</h1>
+  <div class="subtitle">Waterfall Decomposition at Jan-2027</div>
+  <div class="meta">
+    <span>Mode C — Cash Bridge</span>
+    <span>Target: Jan-2027</span>
+    <span>F(t-1) = Claude Output t-1 [F05]</span>
+    <span>F(t) = Claude Output Live [F06]</span>
+    <span>Recon: $1 ✓</span>
+  </div>
+</div>
+
+<div class="content">
+
+<div class="window-line"><strong>Window:</strong> Apr-26 to Jan-27 (10 months) | All deltas = F06 minus F05</div>
+
+<div class="summary-box" style="background: #f8f9fc; border: 1px solid #e0e4ed; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0;">
+  <h3 style="color: #0b2545; margin-bottom: 0.75rem; font-size: 1rem;">Executive Summary</h3>
+  <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Available Cash deteriorates <span class="unfav">($9.2M)</span> between F05 and F06 at Jan-2027. Top drivers:</p>
+  <ol style="padding-left: 1.5rem; font-size: 0.9rem;">
+    <li style="margin-bottom: 0.4rem;"><strong>Net Receivables/Facilities (R294+R295):</strong> +$5.5M Fav — advance rate &lt; 100% means facility growth partially but not fully offsets receivable growth</li>
+    <li style="margin-bottom: 0.4rem;"><strong>Restricted Cash (R287):</strong> ($5.7M) — higher per-customer balances push collateral from $73.1M to $78.8M</li>
+    <li style="margin-bottom: 0.4rem;"><strong>EBTDA (R240):</strong> ($3.9M) — charge-offs (+2bps) and CORP program weigh; SPEND +$572K and GROWTH +$1.4M partially offset</li>
+    <li style="margin-bottom: 0.4rem;"><strong>Covenant Lock (R324):</strong> ($2.4M) — EBTDA deterioration triggers additional cash lock (~0.6× multiplier)</li>
+  </ol>
+  <p style="background: #f8f9fc; border-left: 3px solid #90a4ae; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.85rem;">
+    Combined EBTDA + Covenant effect: ($6.3M) — accounts for 68% of total R325 deterioration. Receivable/Facility net and GC Debt (+$7.9M combined) provide partial offset but are outweighed by collateral growth and current asset/liability shifts.
+  </p>
+</div>
+
+<table>
+<thead>
+<tr><th>Row</th><th>Component</th><th style="text-align:right">Dollar Value</th><th style="text-align:right">Delta</th><th style="min-width:500px">Upstream Driver</th></tr>
+</thead>
+<tbody>
+<tr class="opening-row">
+<td class="row-id">R325</td>
+<td>Available Cash F05</td>
+<td class="dollar">$40.5M</td>
+<td class="delta"></td>
+<td class="driver">F05 forecast for Jan-27</td>
+</tr>
+<tr>
+<td class="row-id">R295</td>
+<td>Credit Facilities Δ</td>
+<td class="dollar"></td>
+<td class="delta fav">+$19.1M</td>
+<td class="driver">Facilities grew MORE in F06 ($708M vs $689M) — directly mirrors R294 since facilities fund receivables (R148 = R144 × R145 × R147). More receivable growth = more facility draw = more cash SOURCE from debt. Partially offsets R294 cost: you deploy more capital but also borrow more to fund it. Net R294+R295 = +$5,530K (facility funding doesn't fully offset receivable increase because advance rate < 100%).</td>
+</tr>
+<tr>
+<td class="row-id">R294</td>
+<td>Loan Receivables Δ</td>
+<td class="dollar"></td>
+<td class="delta unfav">($13.6M)</td>
+<td class="driver">Receivables grew MORE in F06 ($705M vs $692M at Jan-27). Higher per-customer credit balances outweigh the customer count reduction (+8K). More receivable growth = more cash consumed by lending.</td>
+</tr>
+<tr>
+<td class="row-id">R287</td>
+<td>Restricted Cash Δ</td>
+<td class="dollar"></td>
+<td class="delta unfav">($5.7M)</td>
+<td class="driver">Restricted cash (lending + deposit collateral) grew MORE in F06. R252 = (CC balances + PV + deposit balances) × collateral rate. Despite fewer customers, higher per-customer balances and deposit volumes push collateral requirement from $73.1M (F05) to $78.8M (F06). Cash locked up as collateral = cash use.</td>
+</tr>
+<tr>
+<td class="row-id">R240</td>
+<td>EBTDA (cumulative)</td>
+<td class="dollar"></td>
+<td class="delta unfav">($3.9M)</td>
+<td class="driver">RAIM ($2,727K) (charge-offs 0.657%→0.677% on ~$698M balances); SPEND +$572K (better card fee monetization rates); BANKING ($275K) (deposit NIM squeeze: cost spread widened faster than revenue spread on $986M deposits); CORP ($3,002K); GROWTH +$1,448K. Fewer customers (+8K credit, +10K deposit) partially cushion costs but can't offset rate headwinds.</td>
+</tr>
+<tr>
+<td class="row-id">R283</td>
+<td>Current Assets Δ</td>
+<td class="dollar"></td>
+<td class="delta unfav">($2.8M)</td>
+<td class="driver">Other current assets (R255, FIXED input) moved slightly differently between forecasts. Negligible.</td>
+</tr>
+<tr>
+<td class="row-id">R284</td>
+<td>Current Liabilities Δ</td>
+<td class="dollar"></td>
+<td class="delta unfav">($2.4M)</td>
+<td class="driver">Current liabilities grew LESS in F06 — driven by lower net purchase volume position at period-end despite higher PV/customer. Fewer customers (-8K credit) mean lower total payables outstanding. Less liabilities growth = less cash source from timing.</td>
+</tr>
+<tr>
+<td class="row-id">R324</td>
+<td>Covenant Lock</td>
+<td class="dollar"></td>
+<td class="delta unfav">($2.4M)</td>
+<td class="driver">Trailing 6-month EBITDA worse in F06 ($36.9M vs $34.5M). Driven by charge-offs (0.657%→0.677%) compounding through RAIM program. CoF marginally lower (6.59%→6.54%) but charge-off increase dominates. Worse monthly EBITDA = more cash locked under RBC covenant.</td>
+</tr>
+<tr>
+<td class="row-id">R299</td>
+<td>GC Debt Δ</td>
+<td class="dollar"></td>
+<td class="delta fav">+$2.4M</td>
+<td class="driver">GC debt grew more in F06. GC draws = 80% of performance marketing. F06 cumulative marketing $36.4M vs F05 $38.2M — but lower CAC ($87 vs $112) means fewer customers acquired, so total GC draws similar. Slightly more GC borrowing = slightly more cash source.</td>
+</tr>
+<tr>
+<td class="row-id">R290</td>
+<td>Customer Rewards Δ</td>
+<td class="dollar"></td>
+<td class="delta fav">+$486K</td>
+<td class="driver">Rewards asset grew LESS in F06. Fewer customers → lower purchase volumes → lower rewards accrual → less cash tied in rewards asset. Cash benefit.</td>
+</tr>
+<tr>
+<td class="row-id">R201</td>
+<td>Non-Cash/Non-Op Items</td>
+<td class="dollar"></td>
+<td class="delta unfav">($240K)</td>
+<td class="driver">Lower interest earned on equity cash and secured deposits. Cash balances declining = less interest income on those balances. Small relative to other drivers.</td>
+</tr>
+<tr>
+<td class="row-id">R291</td>
+<td>Non-Current Assets Δ</td>
+<td class="dollar"></td>
+<td class="delta unfav">($219K)</td>
+<td class="driver">Non-current assets (R260, FIXED input) grew more in F06 — higher planned capital expenditure. Direct cash use, management-set assumption.</td>
+</tr>
+<tr>
+<td class="row-id">R297</td>
+<td>Equity Δ</td>
+<td class="dollar"></td>
+<td class="delta fav">+$97K</td>
+<td class="driver">Paid-in capital increment difference. Negligible — same SBC/equity compensation schedule.</td>
+</tr>
+<tr class="closing-row">
+<td class="row-id">R325</td>
+<td>Available Cash F06</td>
+<td class="dollar">$31.3M</td>
+<td class="delta"></td>
+<td class="driver">F06 forecast for Jan-27</td>
+</tr>
+<tr class="total-row">
+<td class="row-id"></td>
+<td>Total Delta</td>
+<td class="dollar"></td>
+<td class="delta unfav">($9.2M)</td>
+<td class="driver"><span class="recon-pass">Reconciles ✓</span> (error: $1)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+<div class="footer">
+  Neo Financial — FP&A — Forecast Scenario Engine v1.1.0 • Mode C Cash Bridge • June 8, 2026<br>
+  Model: Neo Corporate Model F06 '26 [Base] (ID: 1kqxvoOswGwyHjBtoOnM5xTGthwc9kLRCmnNIu0msWfs)
+</div>
+
+</div>
+</body>
+</html>
